@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Gra w kostkę</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f1f1f1;
+		}
+		h1 {
+			text-align: center;
+			margin-top: 50px;
+		}
+		label, input {
+            text-align: center;
+            margin: auto;
+			display: block;
+			font-size: 18px;
+		}
+		button {
+			display: block;
+			margin: 20px auto;
+			padding: 10px 20px;
+			font-size: 20px;
+			background-color: #4CAF50;
+			color: white;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		button:hover {
+			background-color: #3e8e41;
+		}
+		#results {
+			text-align: center;
+			margin-top: 50px;
+		}
+		img {
+			height: 100px;
+			width: 100px;
+			margin: 20px;
+			animation: roll 1s ease-in-out;
+		}
+		strong {
+			font-size: 24px;
+		}
+		
+		@keyframes roll {
+			0% {
+				transform: rotate(0deg);
+			}
+			25% {
+				transform: rotate(180deg);
+			}
+			50% {
+				transform: rotate(360deg);
+			}
+			75% {
+				transform: rotate(540deg);
+			}
+			100% {
+				transform: rotate(720deg);
+			}
+		}
+	</style>
+</head>
+<body>
+	<h1>Gra w kostkę</h1>
+	
+	<label for="player1">Gracz 1:</label>
+	<input type="text" id="player1" name="player1" placeholder="Podaj nazwe">
+	
+	<label for="player2">Gracz 2:</label>
+	<input type="text" id="player2" name="player2" placeholder="Podaj nazwe">
+	
+	<button onclick="rollDice()">Rzuć kostką</button>
+	
+	<div id="results"></div>
+	
+	<audio id="diceSound">
+		<source src="dice-142528.mp3" type="audio/mpeg">
+	</audio>
+	
+	<script>
+		let player1Score = 0;
+		let player2Score = 0;
+		let diceSound = document.getElementById("diceSound");
+
+		function rollDice() {
+			let player1Roll = Math.floor(Math.random() * 6) + 1;
+			let player2Roll = Math.floor(Math.random() * 6) + 1;
+			
+			document.getElementById("results").innerHTML += "<img src='dice" + player1Roll + ".png' alt='Kostka'>";
+			document.getElementById("results").innerHTML += "<img src='dice" + player2Roll + ".png' alt='Kostka'><br>";
+			
+			player1Score += player1Roll;
+			player2Score += player2Roll;
+			
+			if (player1Score >= 20 || player2Score >= 20) {
+				endGame();
+			} else {
+				playSound();
+			}
+		}
+		
+		function endGame() {
+			let winner;
+			if (player1Score > player2Score) {
+				winner = document.getElementById("player1").value;
+			} else
+              	if (player2Score > player1Score) {
+			winner = document.getElementById("player2").value;
+		} else {
+			winner = "Remis";
+		}
+		
+		document.getElementById("results").innerHTML += "<strong>" + winner + " wygrał!</strong>";
+		
+		document.querySelector("button").disabled = true;
+	}
+	
+	function playSound() {
+		diceSound.currentTime = 0;
+		diceSound.play();
+	}
+</script>
+</body>
+</html>
